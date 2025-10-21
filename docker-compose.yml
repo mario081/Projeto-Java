@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    # Imagem oficial do PostgreSQL
+    image: postgres:15-alpine
+    container_name: postgres_biblioteca
+
+    # Mapeia a porta do container (5432) para a sua máquina local (5432)
+    # Isso permite que ferramentas externas (como IDEs e o Spring Boot) se conectem.
+    ports:
+      - "5432:5432"
+
+    # Variáveis de ambiente para configurar o banco de dados
+    environment:
+      POSTGRES_DB: biblioteca_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+
+    # Garante que os dados persistam mesmo se o container for parado/reiniciado
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Define o volume para persistência de dados
+volumes:
+  postgres_data:
