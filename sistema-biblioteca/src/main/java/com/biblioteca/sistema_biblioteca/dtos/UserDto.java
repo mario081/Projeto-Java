@@ -1,4 +1,4 @@
-package com.biblioteca.sistema_biblioteca.dto;
+package com.biblioteca.sistema_biblioteca.dtos;
 
 
 import lombok.AllArgsConstructor;
@@ -13,5 +13,4 @@ public class UserDto {
     private String name;
     private String password;
     private String email;
-
 }
