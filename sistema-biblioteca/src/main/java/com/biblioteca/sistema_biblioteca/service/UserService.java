@@ -3,24 +3,18 @@ package com.biblioteca.sistema_biblioteca.service;
 import com.biblioteca.sistema_biblioteca.dtos.UserDto;
 import com.biblioteca.sistema_biblioteca.models.Usuario;
 import com.biblioteca.sistema_biblioteca.repository.UserRepositry;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepositry userRepositry;
     private final PasswordEncoder passwordEncoder;
-
-    //Construtor
-    @Autowired
-    public UserService(UserRepositry userRepositry,  PasswordEncoder passwordEncoder) {
-        this.userRepositry=userRepositry;
-        this.passwordEncoder=passwordEncoder;
-    }
 
     public Usuario cadastrar(UserDto userDto){
 

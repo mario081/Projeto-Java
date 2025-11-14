@@ -18,7 +18,7 @@ public class ResDtoLivro {
 
     public ResDtoLivro(ModelsLivros livro) {
         this.id = livro.getId();
-        this.titulo = livro.getTitulor();
+        this.titulo = livro.getTitulo();
         this.categoria = livro.getCategoria();
         this.autor = livro.getAutor();
         this.anoPublic = livro.getAnoPublic();

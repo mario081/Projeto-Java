@@ -16,7 +16,7 @@ public class ModelsLivros {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String titulor;
+    private String titulo;
     private String autor;
     private String categoria;
     private Integer anoPublic;
