@@ -18,7 +18,7 @@ public class LivrosResponse {
                     .error(Boolean.FALSE)
                     .status(HttpStatusConstants.HTTP_CREATED.CODE)
                     .message(HttpStatusConstants.HTTP_CREATED.DESCRIPTION)
-                    .detailMessage("Created client id: " + modelsLivros.getId())
+                    .detailMessage("Created livro id: " + modelsLivros.getId())
                     .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
         }
 

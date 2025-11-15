@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -30,6 +31,9 @@ public class CommonResponse<T> implements Serializable {
         this.message = message;
         this.detailMessage = detailMessage;
         this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    public CommonResponse(HttpStatus httpStatus, String message, Object o) {
     }
 
     public boolean hasError() {
@@ -123,4 +127,25 @@ public class CommonResponse<T> implements Serializable {
                 .detailMessage("Query performed successfully!")
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
     }
+
+    public static CommonResponse<?> deleted(Object object){
+        return CommonResponse.builder()
+                .result(object)
+                .error(Boolean.FALSE)
+                .status(HttpStatusConstants.HttpOK.CODE)
+                .message(HttpStatusConstants.HttpOK.DESCRIPTION)
+                .detailMessage("deleted")
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
+    }
+
+    public static CommonResponse<?> success(String customMessage, Object object){
+        return CommonResponse.builder()
+                .result(object)
+                .error(Boolean.FALSE)
+                .status(HttpStatusConstants.HttpOK.CODE)
+                .message(HttpStatusConstants.HttpOK.DESCRIPTION)
+                .detailMessage("search successfully")
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
+    }
+
 }

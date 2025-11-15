@@ -19,10 +19,11 @@ public class LivroController {
 
     private final LivroService livroService;
 
-    @GetMapping("/buscar")
-    public ResponseEntity<List<ModelsLivros>> buscarLivros(){
-        return ResponseEntity.ok(livroService.buscarLivros());
-    }
+     @GetMapping("/buscar")
+     public ResponseEntity<CommonResponse<?>> buscarLivros(){
+        CommonResponse<?> response = livroService.buscarLivros();
+        return ResponseEntity.status(response.getStatus()).body(response);
+     }
 
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastroLivro(@RequestBody List<ReqDtoLivro> reqDtoLivro) {
@@ -40,10 +41,10 @@ public class LivroController {
 }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<ModelsLivros> deletarLivro(@PathVariable Long id){
+    public CommonResponse<?> deletarLivro(@PathVariable Long id){
 
-        livroService.deletar(id);
-        return ResponseEntity.noContent().build();
+        return livroService.deletar(id);
+
     }
 
 }

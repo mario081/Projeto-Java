@@ -41,34 +41,38 @@ public class LivroService {
         return CommonResponse.created(livroRepository.saveAll(modelsLivro));
     }
 
-    public List<ModelsLivros> buscarLivros(){
-        return livroRepository.findAll();
+    public CommonResponse<?> buscarLivros(){
+        List<ModelsLivros> livros = livroRepository.findAll();
+
+
+        if(livros.isEmpty()){
+            return CommonResponse.success("Nenhum livro encontrado na base de dados.", livros);
+        }
+
+        return  CommonResponse.success("Busca de livros realizada com sucesso.", livros);
     }
 
 
     public CommonResponse<?> atualizarLivros(Long id, ReqDtoLivro reqDtoLivro){
-      try {
-          Optional<ModelsLivros> livroExistente = livroRepository.findById(id);
 
-          if (livroExistente.isEmpty()) {
-              log.info("entrou no if");
-              throw new ResourceNotFoundException("Livro não encontrado com o Id" + id);
-          }
-          ModelsLivros livro = livroExistente.get();
+          ModelsLivros livroExistente = livroRepository.findById(id)
+                  .orElseThrow(()-> new ResourceNotFoundException("Livro não encontrado com o Id " + id));
 
-          livro.setTitulo(reqDtoLivro.getTitulo());
-          livro.setAutor(reqDtoLivro.getAutor());
-          livro.setCategoria(reqDtoLivro.getCategoria());
-          livro.setAnoPublic(reqDtoLivro.getAnoPublic());
+            livroExistente.setTitulo(reqDtoLivro.getTitulo());
+            livroExistente.setAutor(reqDtoLivro.getAutor());
+            livroExistente.setCategoria(reqDtoLivro.getCategoria());
+            livroExistente.setAnoPublic(reqDtoLivro.getAnoPublic());
 
-          return CommonResponse.updated(livroRepository.save(livro));
-      }catch (Exception e){
-          return CommonResponse.convertThrowableToCommonResponse(e);
-      }
+          return CommonResponse.updated(livroRepository.save(livroExistente));
     }
 
-    public void deletar(Long id){
+    public CommonResponse<?> deletar(Long id){
+
+        if(!livroRepository.existsById(id)){
+            throw new ResourceNotFoundException("Livro com ID " + id + " não encontrado para deleção.");
+        }
         livroRepository.deleteById(id);
-    }
 
+        return CommonResponse.deleted("Livro deletado com sucesso!");
+    }
 }
