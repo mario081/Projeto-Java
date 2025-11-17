@@ -41,16 +41,38 @@ public class LivroService {
         return CommonResponse.created(livroRepository.saveAll(modelsLivro));
     }
 
-    public CommonResponse<?> buscarLivros(){
-        List<ModelsLivros> livros = livroRepository.findAll();
+    public CommonResponse<?> buscarLivros(String titulo){
+        List<ModelsLivros> livros;
 
+        if (titulo != null && !titulo.trim().isEmpty()) {
+            livros = livroRepository.findByTituloContainingIgnoreCase(titulo);
+        } else {
+            livros = livroRepository.findAll();
+        }
 
         if(livros.isEmpty()){
-            return CommonResponse.success("Nenhum livro encontrado na base de dados.", livros);
+            return CommonResponse.success("Nenhum livro encontrado com o nome especificado.", livros);
         }
 
         return  CommonResponse.success("Busca de livros realizada com sucesso.", livros);
     }
+
+    public CommonResponse<?> categoria(String categoria){
+        List<ModelsLivros> livros;
+
+        if (categoria != null && !categoria.trim().isEmpty()) {
+            livros = livroRepository.findByCategoriaContainingIgnoreCase(categoria);
+        } else {
+            livros = livroRepository.findAll();
+        }
+
+        if(livros.isEmpty()){
+            return CommonResponse.success("Nenhum livro encontrado com o nome especificado.", livros);
+        }
+
+        return  CommonResponse.success("Busca de livros realizada com sucesso.", livros);
+    }
+
 
 
     public CommonResponse<?> atualizarLivros(Long id, ReqDtoLivro reqDtoLivro){
@@ -63,16 +85,18 @@ public class LivroService {
             livroExistente.setCategoria(reqDtoLivro.getCategoria());
             livroExistente.setAnoPublic(reqDtoLivro.getAnoPublic());
 
-          return CommonResponse.updated(livroRepository.save(livroExistente));
+            livroRepository.save(livroExistente);
+
+            return CommonResponse.updated("Livro atualizado com sucesso!" , livroExistente);
     }
 
     public CommonResponse<?> deletar(Long id){
 
-        if(!livroRepository.existsById(id)){
-            throw new ResourceNotFoundException("Livro com ID " + id + " não encontrado para deleção.");
-        }
-        livroRepository.deleteById(id);
+        ModelsLivros livro = livroRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Livro com ID " + id + " não encontrado para deleção."));
 
-        return CommonResponse.deleted("Livro deletado com sucesso!");
+          livroRepository.delete(livro);
+
+        return CommonResponse.deleted("Livro deletado com sucesso!", List.of());
     }
 }

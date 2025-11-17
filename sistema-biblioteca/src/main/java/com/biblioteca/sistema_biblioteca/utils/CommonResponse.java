@@ -33,7 +33,13 @@ public class CommonResponse<T> implements Serializable {
         this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    public CommonResponse(HttpStatus httpStatus, String message, Object o) {
+    public CommonResponse(HttpStatus httpStatus, String message) {
+        this.status = httpStatus.value();
+        this.error = true;
+        this.message = httpStatus.getReasonPhrase();
+        this.detailMessage = message;
+        this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+        this.result = null;
     }
 
     public boolean hasError() {
@@ -108,13 +114,13 @@ public class CommonResponse<T> implements Serializable {
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
     }
 
-    public static CommonResponse<?> updated(Object object) {
+    public static CommonResponse<?> updated(String custonmMessage, Object object) {
         return CommonResponse.builder()
                 .result(object)
                 .error(Boolean.FALSE)
                 .status(HttpStatusConstants.HttpOK.CODE)
                 .message(HttpStatusConstants.HttpOK.DESCRIPTION)
-                .detailMessage("Updated")
+                .detailMessage(custonmMessage)
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
     }
 
@@ -128,13 +134,13 @@ public class CommonResponse<T> implements Serializable {
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
     }
 
-    public static CommonResponse<?> deleted(Object object){
+    public static CommonResponse<?> deleted( String custonmMessage, Object object){
         return CommonResponse.builder()
                 .result(object)
                 .error(Boolean.FALSE)
                 .status(HttpStatusConstants.HttpOK.CODE)
                 .message(HttpStatusConstants.HttpOK.DESCRIPTION)
-                .detailMessage("deleted")
+                .detailMessage(custonmMessage)
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
     }
 
@@ -144,8 +150,19 @@ public class CommonResponse<T> implements Serializable {
                 .error(Boolean.FALSE)
                 .status(HttpStatusConstants.HttpOK.CODE)
                 .message(HttpStatusConstants.HttpOK.DESCRIPTION)
-                .detailMessage("search successfully")
+                .detailMessage(customMessage)
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
+    }
+
+    public static <T> CommonResponse<?> error(Object object, String customMessage) {
+        return CommonResponse.builder()
+                .result(object)
+                .error(Boolean.TRUE)
+                .status(HttpStatusConstants.HttpOK.CODE)
+                .message(HttpStatusConstants.HttpOK.DESCRIPTION)
+                .detailMessage(customMessage)
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)).build();
+
     }
 
 }

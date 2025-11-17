@@ -19,11 +19,18 @@ public class LivroController {
 
     private final LivroService livroService;
 
+
      @GetMapping("/buscar")
-     public ResponseEntity<CommonResponse<?>> buscarLivros(){
-        CommonResponse<?> response = livroService.buscarLivros();
+     public ResponseEntity<CommonResponse<?>> buscarLivros(@RequestParam(required = false) String titulo){
+        CommonResponse<?> response = livroService.buscarLivros(titulo);
         return ResponseEntity.status(response.getStatus()).body(response);
      }
+
+    @GetMapping("/categoria")
+    public ResponseEntity<CommonResponse<?>> categoria(@RequestParam(required = false) String categoria){
+        CommonResponse<?> response = livroService.categoria(categoria);
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
 
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastroLivro(@RequestBody List<ReqDtoLivro> reqDtoLivro) {
